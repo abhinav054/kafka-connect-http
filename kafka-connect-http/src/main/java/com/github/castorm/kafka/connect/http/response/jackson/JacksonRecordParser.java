@@ -23,6 +23,7 @@ package com.github.castorm.kafka.connect.http.response.jackson;
 import com.fasterxml.jackson.core.JsonPointer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.castorm.kafka.connect.http.response.spi.KVSerializer;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.Configurable;
 
@@ -40,7 +41,7 @@ public class JacksonRecordParser implements Configurable {
 
     private final Function<Map<String, ?>, JacksonRecordParserConfig> configFactory;
 
-    private final JacksonSerializer serializer;
+    private final KVSerializer serializer;
 
     private List<JsonPointer> keyPointer;
     private Optional<JsonPointer> timestampPointer;
@@ -48,10 +49,10 @@ public class JacksonRecordParser implements Configurable {
     private JsonPointer valuePointer;
 
     public JacksonRecordParser() {
-        this(new JacksonSerializer(new ObjectMapper()));
+        this(new KVSerializer(new ObjectMapper()));
     }
 
-    public JacksonRecordParser(JacksonSerializer serializer) {
+    public JacksonRecordParser(KVSerializer serializer) {
         this(JacksonRecordParserConfig::new, serializer);
     }
 
