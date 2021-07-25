@@ -415,7 +415,7 @@ Parses the HTTP response into a key-value SourceRecord. This process is decompos
 Uses [Jackson](https://github.com/FasterXML/jackson) to look for the records in the response.
 
 ##### Parsing with `JacksonKvMapRecordHttpResponseParser`
-Parses response of type `{"items":{"k1": {"k1":"v1"} ,"k2":{"k2":"v2"}}}`;
+Parses response of type `{"items":{"k1": {"k1":"v1"} ,"k2":{"k2":"v2"}}}`
     
 > ##### `http.response.list.pointer`
 > [JsonPointer](https://tools.ietf.org/html/rfc6901) to the property in the response body containing an array of records 
