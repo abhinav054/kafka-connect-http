@@ -414,7 +414,7 @@ Parses the HTTP response into a key-value SourceRecord. This process is decompos
 ##### Parsing with `JacksonKvRecordHttpResponseParser`
 Uses [Jackson](https://github.com/FasterXML/jackson) to look for the records in the response.
 
-#### Parsing with `JacksonKvRecordHttpResponseParser`
+##### Parsing with `JacksonKvMapRecordHttpResponseParser`
 Parses response of type `{"items":{"k1": {"k1":"v1"} ,"k2":{"k2":"v2"}}}`;
     
 > ##### `http.response.list.pointer`
