@@ -22,6 +22,7 @@ package com.github.castorm.kafka.connect.http.response.jackson;
 
 import com.fasterxml.jackson.core.JsonPointer;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
 
@@ -41,6 +42,7 @@ import static org.apache.kafka.common.config.ConfigDef.Importance.HIGH;
 import static org.apache.kafka.common.config.ConfigDef.Importance.MEDIUM;
 import static org.apache.kafka.common.config.ConfigDef.Type.STRING;
 
+@Slf4j
 @Getter
 public class JacksonRecordParserConfig extends AbstractConfig {
 
@@ -59,6 +61,7 @@ public class JacksonRecordParserConfig extends AbstractConfig {
     JacksonRecordParserConfig(Map<String, ?> originals) {
         super(config(), originals);
         recordsPointer = compile(getString(LIST_POINTER));
+        log.info("list pointer ..."+getString(LIST_POINTER));
         keyPointer = breakDownList(ofNullable(getString(ITEM_KEY_POINTER)).orElse("")).stream().map(JsonPointer::compile).collect(Collectors.toList());
         valuePointer = compile(getString(ITEM_POINTER));
         timestampPointer = ofNullable(getString(ITEM_TIMESTAMP_POINTER)).map(JsonPointer::compile);

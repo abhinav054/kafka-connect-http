@@ -30,12 +30,15 @@ import java.util.stream.Stream;
 
 import com.github.castorm.kafka.connect.http.response.jackson.model.JacksonRecord;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.Configurable;
 
 import static com.github.castorm.kafka.connect.common.CollectionUtils.merge;
 import static java.util.Collections.emptyMap;
 
+
 @RequiredArgsConstructor
+@Slf4j
 public class JacksonResponseMapRecordParser implements Configurable {
 
     private final Function<Map<String, ?>, JacksonRecordParserConfig> configFactory;
@@ -46,6 +49,8 @@ public class JacksonResponseMapRecordParser implements Configurable {
 
     private JsonPointer recordsPointer;
 
+    JacksonRecordParserConfig sampleConfig;
+
     public JacksonResponseMapRecordParser(){this(new JacksonRecordParser(),new JacksonMapSerializer(new ObjectMapper()));}
 
     public JacksonResponseMapRecordParser(JacksonRecordParser recordParser, JacksonMapSerializer serializer){
@@ -54,14 +59,21 @@ public class JacksonResponseMapRecordParser implements Configurable {
 
     @Override
     public void configure(Map<String, ?> settings){
+        log.info("map parser settings ....................");
+        log.info("!!!!!!!!!!!!!!!!"+settings);
         JacksonRecordParserConfig config = configFactory.apply(settings);
+        sampleConfig = config;
+        log.info("map records pointer ............");
         recordsPointer = config.getRecordsPointer();
     }
 
     Stream<JacksonRecord> getRecords(byte[] body) {
 
         JsonNode jsonBody = serializer.deserialize(body);
+//        log.info("jsonbody ......."+jsonBody.toPrettyString());
 
+        log.info("sample config .........."+sampleConfig.toString());
+        recordsPointer = sampleConfig.getRecordsPointer();
         Map<String, Object> responseOffset = getResponseOffset(jsonBody);
 
         return serializer.getArrayAt(jsonBody, recordsPointer)

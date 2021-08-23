@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.castorm.kafka.connect.http.response.jackson.model.JacksonRecord;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.Configurable;
 
 import java.util.Map;
@@ -34,6 +35,7 @@ import java.util.stream.Stream;
 import static com.github.castorm.kafka.connect.common.CollectionUtils.merge;
 import static java.util.Collections.emptyMap;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JacksonResponseRecordParser implements Configurable {
 
@@ -55,8 +57,12 @@ public class JacksonResponseRecordParser implements Configurable {
 
     @Override
     public void configure(Map<String, ?> settings) {
+        log.info("parser settings ....................");
+        log.info(""+settings);
         JacksonRecordParserConfig config = configFactory.apply(settings);
+        log.info("parser pointer .....................");
         recordsPointer = config.getRecordsPointer();
+
     }
 
     Stream<JacksonRecord> getRecords(byte[] body) {

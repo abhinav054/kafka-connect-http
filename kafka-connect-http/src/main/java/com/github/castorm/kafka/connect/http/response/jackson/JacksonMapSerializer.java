@@ -23,13 +23,15 @@ import com.fasterxml.jackson.core.JsonPointer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.castorm.kafka.connect.http.response.spi.KVSerializer;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-
+@Slf4j
 public class JacksonMapSerializer extends KVSerializer {
 
     public  JacksonMapSerializer(){}
@@ -41,7 +43,10 @@ public class JacksonMapSerializer extends KVSerializer {
 
     @Override
     public Stream<JsonNode> getArrayAt(JsonNode node, JsonPointer pointer) {
+        log.info("pointer ..........................................................................................................");
+        log.info("pointer ......."+pointer.toString());
         JsonNode object  = getRequiredAt(node,pointer);
+
         List<JsonNode> array = new ArrayList<>();
         for(Iterator<Map.Entry<String,JsonNode>> it = object.fields();it.hasNext();) {
             Map.Entry<String, JsonNode> ob = it.next();

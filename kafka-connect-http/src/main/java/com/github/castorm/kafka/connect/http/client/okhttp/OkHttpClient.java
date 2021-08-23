@@ -152,6 +152,8 @@ public class OkHttpClient implements HttpClient {
     }
 
     private static HttpResponse mapHttpResponse(Response response) throws IOException {
+        log.info("this is the client response block");
+        log.info(""+response.body());
         return HttpResponse.builder()
                 .code(response.code())
                 .body(response.body() != null ? response.body().bytes() : new byte[0])

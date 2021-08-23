@@ -45,7 +45,7 @@ public class JacksonKvMapRecordHttpResponseParserConfig extends AbstractConfig {
         JacksonRecordParser recordParser = new JacksonRecordParser(serializer);
         recordParser.configure(originals);
         responseParser = new JacksonResponseMapRecordParser(recordParser,serializer);
-        recordParser.configure(originals);
+        responseParser.configure(originals);
         timestampParser = getConfiguredInstance(RECORD_TIMESTAMP_PARSER_CLASS,TimestampParser.class);
 
     }

@@ -37,6 +37,8 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.connect.errors.RetriableException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -53,6 +55,9 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class HttpSourceTask extends SourceTask {
 
+
+//    private static final Logger logger  = LoggerFactory.getLogger(HttpSourceTask.class);
+
     private final Function<Map<String, String>, HttpSourceConnectorConfig> configFactory;
 
     private TimerThrottler throttler;
@@ -68,6 +73,8 @@ public class HttpSourceTask extends SourceTask {
     private SourceRecordFilterFactory recordFilterFactory;
 
     private ConfirmationWindow<Map<String, ?>> confirmationWindow = new ConfirmationWindow<>(emptyList());
+
+
 
     @Getter
     private Offset offset;
@@ -92,6 +99,8 @@ public class HttpSourceTask extends SourceTask {
         recordSorter = config.getRecordSorter();
         recordFilterFactory = config.getRecordFilterFactory();
         offset = loadOffset(config.getInitialOffset());
+
+        log.info("http source connector is started !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
     private Offset loadOffset(Map<String, String> initialOffset) {
@@ -101,15 +110,16 @@ public class HttpSourceTask extends SourceTask {
 
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
-
+        log.info("polling has started ...................");
         throttler.throttle(offset.getTimestamp().orElseGet(Instant::now));
 
         HttpRequest request = requestFactory.createRequest(offset);
 
+        log.info("request has been made");
         HttpResponse response = execute(request);
 
+        log.info("response body is "+response.getBody());
         List<SourceRecord> records = responseParser.parse(response);
-
         List<SourceRecord> unseenRecords = recordSorter.sort(records).stream()
                 .filter(recordFilterFactory.create(offset))
                 .collect(toList());
@@ -123,7 +133,11 @@ public class HttpSourceTask extends SourceTask {
 
     private HttpResponse execute(HttpRequest request) {
         try {
+
+            log.info("request exectuer is bieng called");
+
             return requestExecutor.execute(request);
+
         } catch (IOException e) {
             throw new RetriableException(e);
         }

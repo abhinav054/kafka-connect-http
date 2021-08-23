@@ -27,6 +27,7 @@ import com.github.castorm.kafka.connect.http.response.jackson.model.JacksonRecor
 import com.github.castorm.kafka.connect.http.response.spi.KvRecordHttpResponseParser;
 import com.github.castorm.kafka.connect.http.response.timestamp.spi.TimestampParser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.util.List;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.nameUUIDFromBytes;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JacksonKvMapRecordHttpResponseParser implements KvRecordHttpResponseParser {
 
@@ -47,6 +49,7 @@ public class JacksonKvMapRecordHttpResponseParser implements KvRecordHttpRespons
 
     private TimestampParser timestampParser;
 
+//    private static final Logger logger  = LoggerFactory.getLogger(JacksonKvMapRecordHttpResponseParser.class);
 
     public JacksonKvMapRecordHttpResponseParser(){this(JacksonKvMapRecordHttpResponseParserConfig::new);}
 
